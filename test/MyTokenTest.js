@@ -11,11 +11,26 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 contract("You can define the name to be anything", (accounts) => {
+
+
+  const [deployedAccount, secondAccount, thirdAccount] = accounts;
+
+  let instance = await MyToken.deployed();
+
   it("All tokens should be in my account", async () => {
-    let instance = await MyToken.deployed();
+  
     let totalSupply = await instance.totalSupply();
 
     expect(instance.balanceOf(accounts[0])).to.eventually.be.a.bignumber.equal(totalSupply);
 
   });
+
+
+  describe("Group of tests", () => {
+  	it("Should...", async () => {
+
+
+  		console.log(deployedAccount, secondAccount, thirdAccount);
+  	}) 
+  };
 });
