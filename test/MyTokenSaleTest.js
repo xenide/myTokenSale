@@ -22,6 +22,9 @@ contract("My token sale test", (accounts) => {
 
 	    const totalTokens = new BN( process.env.INITIAL_TOKENS );
 
+	    // .to .be .been .is .that .and .have .with .at .of .same
+	    // Are just syntactic sugar
+	    // They don't have any actual effect
 	    expect(tokenContractInstance.balanceOf(saleContractInstance.address)).
 	    to.eventually.be.a.bignumber.equal(totalTokens);
 	});
@@ -33,7 +36,7 @@ contract("My token sale test", (accounts) => {
 	    expect(saleContractInstance.
 	    		sendTransaction( {from: anotherAccount, 
 	    				   value: web3.utils.toWei("100","wei")}))
-	    		.to.be.fulfilled;
+	    		.to.be.eventually.fulfilled;
 
 	    expect(tokenContractInstance.balanceOf(anotherAccount)).
 	    to.eventually.be.a.bignumber.equal(new BN(web3.utils.toWei("100","wei")));
