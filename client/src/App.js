@@ -7,7 +7,14 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { loaded: false, kycAddress: '0x0', tokenSaleAddress : null };
+  state = { loaded: false, kycAddress: '0x0', tokenSaleAddress : null, SCTTokens: null };
+
+  getSCTTokens = async () => {
+    let result = await this.myToken.methods.balanceOf(this.accounts[0]).call();
+
+    this.setState({SCTTokens : result });
+
+  };
 
   componentDidMount = async () => {
     try {
@@ -37,7 +44,7 @@ class App extends Component {
       let tokenSaleAddress = MyTokenSale.networks[this.networkId].address;
 
 
-      this.setState({ loaded: true, tokenSaleAddress: tokenSaleAddress });
+      this.setState({ loaded: true, tokenSaleAddress: tokenSaleAddress }, this.getSCTTokens);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -46,6 +53,7 @@ class App extends Component {
       console.error(error);
     }
   };
+
 
   handleSubmit = async () => {
     const { kycAddress } = this.state;
@@ -107,6 +115,8 @@ class App extends Component {
         </h2>
 
         <p>Send your weis to this address: {this.state.tokenSaleAddress} to get tokens </p>
+      
+        <h3> You currently have {this.state.SCTTokens} StarDucks Capu-Tokens! </h3>
       </div>
     );
   };
