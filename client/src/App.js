@@ -7,7 +7,9 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { loaded: false, kycAddress: '0x0', tokenSaleAddress : null, SCTTokens: null };
+  state = { loaded: false, kycAddress: '0x0', 
+            tokenSaleAddress : null, SCTTokens: null,
+            buyAmountInWei : 0 };
 
   getSCTTokens = async () => {
     let result = await this.myToken.methods.balanceOf(this.accounts[0]).call();
@@ -88,6 +90,17 @@ class App extends Component {
     });
   };
   
+  handleBuying = async () => {
+     const {buyAmountInWei} = this.state;
+
+     console.log(buyAmountInWei);
+     await this.web3.eth.sendTransaction({from: this.accounts[0], 
+                                      to: this.state.tokenSaleAddress,
+                                      value: buyAmountInWei});
+
+     this.getSCTTokens();
+  }
+
   render() {
     if (!this.state.loaded) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -111,11 +124,11 @@ class App extends Component {
           <button onClick={this.handleCheckAddress}>Check</button>
         </p>
 
-        <h2>Buy Tokens
-        </h2>
-
-        <p>Send your weis to this address: {this.state.tokenSaleAddress} to get tokens </p>
-      
+        <h2>Buy Tokens</h2>
+        <p>I want to spend </p>
+        <input type="number" name="buyAmountInWei" onChange={this.handleInputChange} value={this.state.buyAmountInWei} /> 
+        <p>weis to buy SCT to get tokens </p> 
+        <button onClick={this.handleBuying}>Buy SCT</button>
         <h3> You currently have {this.state.SCTTokens} StarDucks Capu-Tokens! </h3>
       </div>
     );
