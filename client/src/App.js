@@ -7,7 +7,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { loaded: false, kycAddress: '0x0' };
+  state = { loaded: false, kycAddress: '0x0', tokenSaleAddress : null };
 
   componentDidMount = async () => {
     try {
@@ -33,9 +33,11 @@ class App extends Component {
           KycContract.abi,
           KycContract.networks[this.networkId] && KycContract.networks[this.networkId].address,
       );
-      console.log(KycContract.networks);
 
-      this.setState({ loaded: true });
+      let tokenSaleAddress = MyTokenSale.networks[this.networkId].address;
+
+
+      this.setState({ loaded: true, tokenSaleAddress: tokenSaleAddress });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -100,6 +102,11 @@ class App extends Component {
           <input type="text" name="checkAddress" onChange={this.handleInputChange} value={this.state.checkAddress} /> 
           <button onClick={this.handleCheckAddress}>Check</button>
         </p>
+
+        <h2>Buy Tokens
+        </h2>
+
+        <p>Send your weis to this address: {this.state.tokenSaleAddress} to get tokens </p>
       </div>
     );
   };
