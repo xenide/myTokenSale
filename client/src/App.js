@@ -54,6 +54,14 @@ class App extends Component {
     alert(kycAddress + " has been whitelisted!");
   };
 
+  handleCheckAddress = async () => {
+    const { checkAddress } = this.state;
+
+    let result = await this.kycContract.methods.kycCompleted(checkAddress).call();
+    console.log(result);
+  };
+
+
   // Omg, this function did not work when it was defined as
   // handleInputChange (event) {}
   // 'this' would be undefined
@@ -84,6 +92,14 @@ class App extends Component {
         </p>
           <input type="text" name="kycAddress" onChange={this.handleInputChange} value={this.state.kycAddress} /> 
         <button onClick={this.handleSubmit}>Submit Address for KYC</button>
+      
+        <br/>
+
+        <p>
+          Check status of address:
+          <input type="text" name="checkAddress" onChange={this.handleInputChange} value={this.state.checkAddress} /> 
+          <button onClick={this.handleCheckAddress}>Check</button>
+        </p>
       </div>
     );
   };
