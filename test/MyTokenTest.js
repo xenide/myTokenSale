@@ -18,7 +18,7 @@ contract("You can define the name to be anything", (accounts) => {
     let instance = this.myToken;
     let totalSupply = await instance.totalSupply();
 
-    expect(instance.balanceOf(accounts[0])).to.eventually.be.a.bignumber.equal(totalSupply);
+    return expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(totalSupply);
 
   });
 
@@ -31,7 +31,7 @@ contract("You can define the name to be anything", (accounts) => {
       expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(totalSupply);
       expect(instance.transfer(recipient, sendTokens)).to.eventually.be.fulfilled;      
       expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(totalSupply.sub(new BN(sendTokens)));
-      expect(instance.balanceOf(recipient)).to.eventually.be.a.bignumber.equal(new BN(sendTokens));
+      return expect(instance.balanceOf(recipient)).to.eventually.be.a.bignumber.equal(new BN(sendTokens));
     });
 
     it("It's not possible to send more tokens than account 1 has", async () => {
@@ -41,7 +41,7 @@ contract("You can define the name to be anything", (accounts) => {
       expect(instance.transfer(recipient, new BN(balanceOfAccount+1))).to.eventually.be.rejected;
 
       //check if the balance is still the same
-      expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(balanceOfAccount);
+      return expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(balanceOfAccount);
     });
   });
 });

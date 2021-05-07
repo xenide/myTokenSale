@@ -2,6 +2,7 @@ require("dotenv").config({ path: "../.env" });
 
 const MyTokenSale = artifacts.require("MyTokenSale");
 const MyToken = artifacts.require("MyToken");
+const Kyc = artifacts.require("KycContract");
 
 const chai = require("./chaisetup.js");
 const BN = web3.utils.BN;
@@ -13,7 +14,7 @@ contract("My token sale test", (accounts) => {
 
 	it("Should not have any tokens in the deployer account ", async () => {
 	    let instance = await MyToken.deployed();
-	    expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(new BN(0));
+	    return expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(new BN(0));
 	});
 
 	it("all tokens should be in the token sale smart contract", async () => {
@@ -25,22 +26,27 @@ contract("My token sale test", (accounts) => {
 	    // .to .be .been .is .that .and .have .with .at .of .same
 	    // Are just syntactic sugar
 	    // They don't have any actual effect
-	    expect(tokenContractInstance.balanceOf(saleContractInstance.address)).
+	    return expect(tokenContractInstance.balanceOf(saleContractInstance.address)).
 	    to.eventually.be.a.bignumber.equal(totalTokens);
 	});
 
 	it("should be possible to buy the tokens", async () => {
 	    let tokenContractInstance = await MyToken.deployed();
 	    let saleContractInstance = await MyTokenSale.deployed();
+	    let kycContractInstance = await Kyc.deployed()
+
+	    await kycContractInstance.setKycAllowed(recipient, {from: initialHolder});
 
 	    expect(saleContractInstance.
-	    		sendTransaction( {from: anotherAccount, 
+	    		sendTransaction( {from: recipient, 
 	    				   value: web3.utils.toWei("100","wei")}))
 	    		.to.be.eventually.fulfilled;
 
-	    expect(tokenContractInstance.balanceOf(anotherAccount)).
-	    to.eventually.be.a.bignumber.equal(new BN(web3.utils.toWei("100","wei")));
-
+	    // Seems that for each 'it' clause 
+	    // We should only have one expect statement
+	    // Else something will go wrong 
+ 		return expect(tokenContractInstance.balanceOf(recipient)).
+	  	to.eventually.be.a.bignumber.equal(new BN(web3.utils.toWei("100","wei")));
 	});
 
 });
