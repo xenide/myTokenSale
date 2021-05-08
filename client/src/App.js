@@ -45,7 +45,7 @@ class App extends Component {
 
       let tokenSaleAddress = MyTokenSale.networks[this.networkId].address;
 
-
+      this.listenToTokenTransfer();
       this.setState({ loaded: true, tokenSaleAddress: tokenSaleAddress }, this.getSCTTokens);
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -97,9 +97,11 @@ class App extends Component {
      await this.web3.eth.sendTransaction({from: this.accounts[0], 
                                       to: this.state.tokenSaleAddress,
                                       value: buyAmountInWei});
-
-     this.getSCTTokens();
   }
+
+  listenToTokenTransfer = async () => {
+    this.myToken.events.Transfer({to: this.accounts[0]}).on("data", this.getSCTTokens);
+  };
 
   render() {
     if (!this.state.loaded) {

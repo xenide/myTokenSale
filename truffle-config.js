@@ -23,6 +23,26 @@ module.exports = {
         });
       },
       network_id: 5777
+    },
+    ropsten_infura: {
+      provider: function() {
+        return new HDWalletProvider({
+          mnemonic : mnemonicPhrase,
+          providerOrUrl : 'https://ropsten.infura.io/v3/a3cdc876905f433cbf30bfc01b45c52c',
+          addressIndex : accountIndex 
+        });
+      },
+      network_id: 3
+    },
+    goerli_infura: {
+      provider: function() {
+        return new HDWalletProvider({
+          mnemonic : mnemonicPhrase,
+          providerOrUrl : 'https://goerli.infura.io/v3/a3cdc876905f433cbf30bfc01b45c52c',
+          addressIndex : accountIndex 
+        });
+      },
+      network_id: 5
     }
   },
   compilers: {
@@ -44,3 +64,4 @@ module.exports = {
     }
   }
 };
+
