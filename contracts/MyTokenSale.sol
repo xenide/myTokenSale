@@ -1,9 +1,9 @@
 pragma solidity 0.6.2;
 
-import "./Crowdsale.sol";
+import "@openzeppelin/contracts/crowdsale/emission/MintedCrowdsale.sol";
 import "./KycContract.sol";
 
-contract MyTokenSale is Crowdsale {
+contract MyTokenSale is MintedCrowdsale {
 
     KycContract kyc;
     constructor(
