@@ -9,12 +9,15 @@ import "./App.css";
 class App extends Component {
   state = { loaded: false, kycAddress: '0x0', 
             tokenSaleAddress : null, SCTTokens: null,
-            buyAmountInWei : 0 };
+            buyAmountInWei : 0,
+            totalSupply : null };
 
   getSCTTokens = async () => {
     let result = await this.myToken.methods.balanceOf(this.accounts[0]).call();
-
-    this.setState({SCTTokens : result });
+    let totalSupplyResult = await this.myToken.methods.totalSupply().call();
+    
+    this.setState({SCTTokens : result,
+                    totalSupply : totalSupplyResult });
 
   };
 
@@ -111,6 +114,7 @@ class App extends Component {
       <div className="App">
         <h1>Starfucks KapooChino Kafe</h1>
         <p>You can now buy poo cafe with real fucks!</p>
+
         <h2>Enable yo account</h2>
         <p>
           Address to allow:
@@ -125,6 +129,7 @@ class App extends Component {
           <input type="text" name="checkAddress" onChange={this.handleInputChange} value={this.state.checkAddress} /> 
           <button onClick={this.handleCheckAddress}>Check</button>
         </p>
+        <h2> Current Total Supply : {this.state.totalSupply} </h2>
 
         <h2>Buy Tokens</h2>
         <p>I want to spend </p>
