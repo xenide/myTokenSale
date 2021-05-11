@@ -11,10 +11,19 @@ module.exports = async function(deployer, network, accounts) {
 	await deployer.deploy(MyTokenSale, 1, accounts[0], MyToken.address, Kyc.address);
 	
 	let tokenInstance = await MyToken.deployed();
-	await tokenInstance.transfer(MyTokenSale.address, process.env.INITIAL_TOKENS);
+	// console.log(tokenInstance);
 
-	console.log(instance);
+	let result = await tokenInstance.contract.methods.isMinter(accounts[0]).call();
 
-	await instance.addMinter(MyTokenSale.address).send({ from: addr[0] });
-	await instance.renounceMinter().send({ from: addr[0] });
+	console.log("accounts[0] isMinter: ", result);
+	await tokenInstance.contract.methods.addMinter(MyTokenSale.address).send({ from: accounts[0] });
+	await tokenInstance.contract.methods.renounceMinter().send({ from: accounts[0] });
+
+	result = await tokenInstance.contract.methods.isMinter(accounts[0]).call();
+
+	console.log("accounts[0] isMinter: ", result);
+
+	result = await tokenInstance.contract.methods.isMinter(MyTokenSale.address).call();
+	console.log("MyTokenSale isMinter: ", result);
+
 };
